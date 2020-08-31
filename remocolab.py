@@ -174,20 +174,9 @@ def _setupSSHDMain(ngrok_region):
   #Set your ngrok Authtoken.
   ngrok_token = getpass.getpass()
 
-  if not ngrok_region:
-    print("Select your ngrok region:")
-    print("us - United States (Ohio)")
-    print("eu - Europe (Frankfurt)")
-    print("ap - Asia/Pacific (Singapore)")
-    print("au - Australia (Sydney)")
-    print("sa - South America (Sao Paulo)")
-    print("jp - Japan (Tokyo)")
-    print("in - India (Mumbai)")
-    ngrok_region = region = ap
-
   return (True, _setupSSHDImpl(ngrok_token, ngrok_region))
 
-def setupSSHD(ngrok_region = None, check_gpu_available = False):
+def setupSSHD(ngrok_region = "ap", check_gpu_available = False):
   s, msg = _setupSSHDMain(ngrok_region)
   print(msg)
 
