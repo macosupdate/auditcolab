@@ -98,7 +98,7 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
 
   subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  my_apt.installPkg("openssh-server")
+  my_apt.installPkg("openssh-server","xfce4","xrdp")
   my_apt.commit()
   my_apt.close()
 
@@ -138,11 +138,14 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   subprocess.run(["chpasswd"], input = f"root:{root_password}", universal_newlines = True)
   subprocess.run(["chpasswd"], input = f"{user_name}:{user_password}", universal_newlines = True)
   subprocess.run(["service", "ssh", "restart"])
+  subprocess.run(["adduser", "xrdp"], check = True)
+  subprocess.run(["adduser", "ssl-cert"], check = True)
+  subprocess.run(["service", "xrdp", "start"])
 
   if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
     subprocess.run(["./ngrok", "authtoken", ngrok_token])
 
-  ngrok_proc = subprocess.Popen(["./ngrok", "tcp", "-region", ngrok_region, "22"])
+  ngrok_proc = subprocess.Popen(["./ngrok", "tcp", "-region", ngrok_region, "3389"])
   time.sleep(2)
   if ngrok_proc.poll() != None:
     raise RuntimeError("Failed to run ngrok. Return code:" + str(ngrok_proc.returncode) + "\nSee runtime log for more info.")
