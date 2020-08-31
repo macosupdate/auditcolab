@@ -156,15 +156,10 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
 
   ssh_common_options =  "-o UserKnownHostsFile=/dev/null -o VisualHostKey=yes"
   msg += "---\n"
-  if is_VNC:
-    msg += "Execute following command on your local machine and login before running TurboVNC viewer:\n"
-    msg += "✂️"*24 + "\n"
-    msg += f"ssh {ssh_common_options} -L 5901:localhost:5901 -p {port} {user_name}@{hostname}\n"
-  else:
-    msg += "Command to connect to the ssh server:\n"
-    msg += "✂️"*24 + "\n"
-    msg += f"ssh {ssh_common_options} -p {port} {user_name}@{hostname}\n"
-    msg += "✂️"*24 + "\n"
+  msg += "Command to connect to the ssh server:\n"
+  msg += "✂️"*24 + "\n"
+  msg += f"ssh {ssh_common_options} -p {port} {user_name}@{hostname}\n"
+  msg += "✂️"*24 + "\n"
   return msg
 
 def _setupSSHDMain(ngrok_region):
