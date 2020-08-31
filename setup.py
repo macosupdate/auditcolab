@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name = "remocolab.py",
     version = "0.1",
-    py_modules = ['auditcolab'],
+    py_modules = ['remocolab'],
     url = "https://github.com/macosupdate/auditcolab",
-    author = "buicong",
+    author = "demotomohiro",
 )
