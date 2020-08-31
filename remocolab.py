@@ -138,8 +138,8 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   subprocess.run(["chpasswd"], input = f"root:{root_password}", universal_newlines = True)
   subprocess.run(["chpasswd"], input = f"{user_name}:{user_password}", universal_newlines = True)
   subprocess.run(["service", "ssh", "restart"])
-  subprocess.run(["adduser", "xrdp"], check = True)
-  subprocess.run(["adduser", "ssl-cert"], check = True)
+  subprocess.run(["adduser", "xrdp", ""], check = True)
+  subprocess.run(["adduser", "ssl-cert", ""], check = True)
   subprocess.run(["service", "xrdp", "start"])
 
   if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
