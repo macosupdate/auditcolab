@@ -98,7 +98,7 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
 
   subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  my_apt.installPkg("xfce4","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","chromium-browser")
+  my_apt.installPkg("xfce4","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","firefox")
   my_apt.commit()
   my_apt.close()
 
