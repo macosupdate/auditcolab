@@ -143,7 +143,7 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   msg += "Thông tin kết nối:\n"
   msg += "{hostname}:{port}\n"
   msg += "✂️"*24 + "\n"
-  return msg
+  print(msg)
 
 def setupSSHD(ngrok_region, ngrok_auth):
   return (True, _setupSSHDImpl(ngrok_auth, ngrok_region))
