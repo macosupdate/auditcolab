@@ -176,7 +176,7 @@ def _setupSSHDMain(ngrok_region,ngrok_auth):
 
   return (True, _setupSSHDImpl(ngrok_token, ngrok_region,ngrok_auth))
 
-def setupSSHD(ngrok_region = "ap", ngrok_auth):
+def setupSSHD("ap", ngrok_auth):
   s, msg = _setupSSHDMain(ngrok_region,ngrok_auth)
   print(msg)
 
