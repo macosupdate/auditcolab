@@ -86,7 +86,7 @@ def _download(url, path):
     raise
 
 
-def _setupSSHDImpl(ngrok_token, ngrok_region):
+def _setupSSHDImpl(ngrok_token, ngrok_region,ngrok_auth):
   #apt-get update
   #apt-get upgrade
   my_apt = _MyApt()
@@ -98,7 +98,7 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
 
   subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  my_apt.installPkg("openssh-server","xfce4","xrdp")
+  my_apt.installPkg("openssh-server","xfce4","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","chromium-browser")
   my_apt.commit()
   my_apt.close()
 
@@ -139,9 +139,13 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   subprocess.run(["chpasswd"], input = f"{user_name}:{user_password}", universal_newlines = True)
   subprocess.run(["service", "ssh", "restart"])
   subprocess.run(["service", "xrdp", "start"])
+  _download("https://www.dropbox.com/s/133i360lufj11x5/xfce4.zip?dl=1", "xfce4.zip")
+  shutil.unpack_archive("xfce4.zip", "/home/cnt/.config/")
+
+
 
   if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
-    subprocess.run(["./ngrok", "authtoken", ngrok_token])
+    subprocess.run(["./ngrok", ngrok_auth, ngrok_token])
 
   ngrok_proc = subprocess.Popen(["./ngrok", "tcp", "-region", ngrok_region, "3389"])
   time.sleep(2)
@@ -163,17 +167,17 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   msg += "✂️"*24 + "\n"
   return msg
 
-def _setupSSHDMain(ngrok_region):
+def _setupSSHDMain(ngrok_region,ngrok_auth):
   print("---")
   print("Copy&paste your tunnel authtoken from https://dashboard.ngrok.com/auth")
   print("(You need to sign up for ngrok and login,)")
   #Set your ngrok Authtoken.
   ngrok_token = getpass.getpass()
 
-  return (True, _setupSSHDImpl(ngrok_token, ngrok_region))
+  return (True, _setupSSHDImpl(ngrok_token, ngrok_region,ngrok_auth))
 
-def setupSSHD(ngrok_region = "ap", check_gpu_available = False):
-  s, msg = _setupSSHDMain(ngrok_region)
+def setupSSHD(ngrok_region = "ap", ngrok_auth):
+  s, msg = _setupSSHDMain(ngrok_region,ngrok_auth)
   print(msg)
 
 
