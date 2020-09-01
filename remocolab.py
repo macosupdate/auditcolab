@@ -98,29 +98,11 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
 
   subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  my_apt.installPkg("openssh-server","xfce4","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","chromium-browser")
+  my_apt.installPkg("xfce4","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","chromium-browser")
   my_apt.commit()
   my_apt.close()
 
-  #Reset host keys
-  for i in pathlib.Path("/etc/ssh").glob("ssh_host_*_key"):
-    i.unlink()
-  subprocess.run(
-                  ["ssh-keygen", "-A"],
-                  check = True)
-
-  #Prevent ssh session disconnection.
-  with open("/etc/ssh/sshd_config", "a") as f:
-    f.write("\n\nClientAliveInterval 120\n")
-
   msg = ""
-  msg += "ECDSA key fingerprint of host:\n"
-  ret = subprocess.run(
-                ["ssh-keygen", "-lvf", "/etc/ssh/ssh_host_ecdsa_key.pub"],
-                stdout = subprocess.PIPE,
-                check = True,
-                universal_newlines = True)
-  msg += ret.stdout + "\n"
 
   _download("https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip", "ngrok.zip")
   shutil.unpack_archive("ngrok.zip")
@@ -130,7 +112,6 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   user_password = "vinh123456"
   user_name = "cnt"
   msg += "✂️"*24 + "\n"
-  msg += f"root password: {root_password}\n"
   msg += f"{user_name} password: {user_password}\n"
   msg += "✂️"*24 + "\n"
   subprocess.run(["useradd", "-s", "/bin/bash", "-m", user_name])
@@ -141,7 +122,6 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   subprocess.run(["service", "xrdp", "start"])
   _download("https://www.dropbox.com/s/133i360lufj11x5/xfce4.zip?dl=1", "xfce4.zip")
   shutil.unpack_archive("xfce4.zip", "/home/cnt/.config/")
-
 
 
   if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
@@ -159,19 +139,11 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   hostname = m.group(1)
   port = m.group(2)
 
-  ssh_common_options =  "-o UserKnownHostsFile=/dev/null -o VisualHostKey=yes"
   msg += "---\n"
-  msg += "Command to connect to the ssh server:\n"
-  msg += "✂️"*24 + "\n"
-  msg += f"ssh {ssh_common_options} -p {port} {user_name}@{hostname}\n"
+  msg += "Thông tin kết nối:\n"
+  msg += "{hostname}:{port}\n"
   msg += "✂️"*24 + "\n"
   return msg
-
-def _setupSSHDMain(ngrok_region,ngrok_auth):
-  #Set your ngrok Authtoken.
-  ngrok_token = ngrok_auth
-
-  return (True, _setupSSHDImpl(ngrok_token, ngrok_region))
 
 def setupSSHD(ngrok_region, ngrok_auth):
   return (True, _setupSSHDImpl(ngrok_auth, ngrok_region))
