@@ -86,7 +86,7 @@ def _download(url, path):
     raise
 
 
-def _setupSSHDImpl(ngrok_token, ngrok_region,ngrok_auth):
+def _setupSSHDImpl(ngrok_token, ngrok_region):
   #apt-get update
   #apt-get upgrade
   my_apt = _MyApt()
@@ -145,7 +145,7 @@ def _setupSSHDImpl(ngrok_token, ngrok_region,ngrok_auth):
 
 
   if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
-    subprocess.run(["./ngrok", ngrok_auth, ngrok_token])
+    subprocess.run(["./ngrok", "authtoken", ngrok_token])
 
   ngrok_proc = subprocess.Popen(["./ngrok", "tcp", "-region", ngrok_region, "3389"])
   time.sleep(2)
@@ -168,17 +168,13 @@ def _setupSSHDImpl(ngrok_token, ngrok_region,ngrok_auth):
   return msg
 
 def _setupSSHDMain(ngrok_region,ngrok_auth):
-  print("---")
-  print("Copy&paste your tunnel authtoken from https://dashboard.ngrok.com/auth")
-  print("(You need to sign up for ngrok and login,)")
   #Set your ngrok Authtoken.
-  ngrok_token = getpass.getpass()
+  ngrok_token = ngrok_auth
 
-  return (True, _setupSSHDImpl(ngrok_token, ngrok_region,ngrok_auth))
+  return (True, _setupSSHDImpl(ngrok_token, ngrok_region))
 
 def setupSSHD(ngrok_region, ngrok_auth):
-  s, msg = _setupSSHDMain(ngrok_region,ngrok_auth)
-  print(msg)
+  return (True, _setupSSHDImpl(ngrok_auth, ngrok_region))
 
 
 
