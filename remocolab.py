@@ -86,7 +86,7 @@ def _download(url, path):
     raise
 
 
-def _setupSSHDImpl(ngrok_token, ngrok_region):
+def _setupSSHDImpl(sshkey, binport):
   #apt-get update
   #apt-get upgrade
   my_apt = _MyApt()
@@ -96,9 +96,9 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   my_apt.update_upgrade()
   my_apt.commit()
 
-  subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
+  # subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  my_apt.installPkg("xfce4","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","firefox")
+  my_apt.installPkg("xubuntu-core","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","firefox","autossh")
   my_apt.commit()
   my_apt.close()
 
@@ -123,30 +123,12 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   _download("https://www.dropbox.com/s/133i360lufj11x5/xfce4.zip?dl=1", "xfce4.zip")
   shutil.unpack_archive("xfce4.zip", "/home/cnt/.config/")
 
+  _download(sshkey, "/root/remote")
+  subprocess.run(["chmod", "0600", "/root/remote"])
+  subprocess.run(["autossh", "-N", "-R", f"{binport}:0.0.0.0:3389", "root@arita.cntjsc.com", "-p", "2121", "-i", "/root/remote", "-o", "StrictHostKeyChecking=no"])
 
-  # if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
-  #   subprocess.run(["./ngrok", "authtoken", ngrok_token])
-
-  # ngrok_proc = subprocess.Popen(["./ngrok", "tcp", "-region", ngrok_region, "3389"])
-  # time.sleep(2)
-  # if ngrok_proc.poll() != None:
-  #   raise RuntimeError("Failed to run ngrok. Return code:" + str(ngrok_proc.returncode) + "\nSee runtime log for more info.")
-
-  # with urllib.request.urlopen("http://localhost:4040/api/tunnels") as response:
-  #   url = json.load(response)['tunnels'][0]['public_url']
-  #   m = re.match("tcp://(.+):(\d+)", url)
-
-  # hostname = m.group(1)
-  # port = m.group(2)
-
-  # msg += "---\n"
-  # msg += "Thông tin kết nối:\n"
-  # msg += f"{hostname}:{port}\n"
-  # msg += "✂️"*24 + "\n"
-  # print(msg)
-
-def setupSSHD(ngrok_region, ngrok_auth):
-  return (True, _setupSSHDImpl(ngrok_auth, ngrok_region))
+def setupSSHD(binport, sshkey):
+  return (True, _setupSSHDImpl(sshkey, binport))
 
 
 
