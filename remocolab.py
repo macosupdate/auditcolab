@@ -104,9 +104,9 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
 
   msg = ""
 
-  _download("https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip", "ngrok.zip")
-  shutil.unpack_archive("ngrok.zip")
-  pathlib.Path("ngrok").chmod(stat.S_IXUSR)
+  # _download("https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip", "ngrok.zip")
+  # shutil.unpack_archive("ngrok.zip")
+  # pathlib.Path("ngrok").chmod(stat.S_IXUSR)
 
   root_password = "vinh123456"
   user_password = "vinh123456"
@@ -124,26 +124,26 @@ def _setupSSHDImpl(ngrok_token, ngrok_region):
   shutil.unpack_archive("xfce4.zip", "/home/cnt/.config/")
 
 
-  if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
-    subprocess.run(["./ngrok", "authtoken", ngrok_token])
+  # if not pathlib.Path('/root/.ngrok2/ngrok.yml').exists():
+  #   subprocess.run(["./ngrok", "authtoken", ngrok_token])
 
-  ngrok_proc = subprocess.Popen(["./ngrok", "tcp", "-region", ngrok_region, "3389"])
-  time.sleep(2)
-  if ngrok_proc.poll() != None:
-    raise RuntimeError("Failed to run ngrok. Return code:" + str(ngrok_proc.returncode) + "\nSee runtime log for more info.")
+  # ngrok_proc = subprocess.Popen(["./ngrok", "tcp", "-region", ngrok_region, "3389"])
+  # time.sleep(2)
+  # if ngrok_proc.poll() != None:
+  #   raise RuntimeError("Failed to run ngrok. Return code:" + str(ngrok_proc.returncode) + "\nSee runtime log for more info.")
 
-  with urllib.request.urlopen("http://localhost:4040/api/tunnels") as response:
-    url = json.load(response)['tunnels'][0]['public_url']
-    m = re.match("tcp://(.+):(\d+)", url)
+  # with urllib.request.urlopen("http://localhost:4040/api/tunnels") as response:
+  #   url = json.load(response)['tunnels'][0]['public_url']
+  #   m = re.match("tcp://(.+):(\d+)", url)
 
-  hostname = m.group(1)
-  port = m.group(2)
+  # hostname = m.group(1)
+  # port = m.group(2)
 
-  msg += "---\n"
-  msg += "Thông tin kết nối:\n"
-  msg += f"{hostname}:{port}\n"
-  msg += "✂️"*24 + "\n"
-  print(msg)
+  # msg += "---\n"
+  # msg += "Thông tin kết nối:\n"
+  # msg += f"{hostname}:{port}\n"
+  # msg += "✂️"*24 + "\n"
+  # print(msg)
 
 def setupSSHD(ngrok_region, ngrok_auth):
   return (True, _setupSSHDImpl(ngrok_auth, ngrok_region))
