@@ -98,7 +98,7 @@ def _setupSSHDImpl(sshkey, binport):
 
   # subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  my_apt.installPkg("xubuntu-core","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","firefox","autossh")
+  my_apt.installPkg("xfce4","xrdp","ttf-mscorefonts-installer","zenity","zenity-common","fonts-wqy-zenhei","firefox","autossh")
   my_apt.commit()
   my_apt.close()
 
