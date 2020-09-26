@@ -125,7 +125,7 @@ def _setupSSHDImpl(sshkey, binport):
 
   _download(sshkey, "/root/remote")
   subprocess.run(["chmod", "0600", "/root/remote"])
-  subprocess.run(["ssh", "-C", "-N", "-R", f"{binport}:0.0.0.0:3389", "root@arita.cntjsc.com", "-p", "2121", "-i", "/root/remote", "-o", "StrictHostKeyChecking=no"])
+  subprocess.run(["ssh", "-C", "-N", "-R", "1389:0.0.0.0:3389", "root@arita.cntjsc.com", "-p", "2121", "-i", "/root/remote", "-o", "StrictHostKeyChecking=no"])
 
 def setupSSHD(binport, sshkey):
   return (True, _setupSSHDImpl(sshkey, binport))
